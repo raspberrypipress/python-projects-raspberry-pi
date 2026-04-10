@@ -59,7 +59,7 @@ while running:
         y = y+line_height
 
     pygame.display.flip()
-.
+
     dt = clock.tick(60) / 1000
 
 pygame.quit()

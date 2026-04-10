@@ -12,7 +12,7 @@ tft=st7789.ST7789(
         cs=Pin(5, Pin.OUT),
         dc=Pin(6, Pin.OUT),
         backlight=Pin(7, Pin.OUT),
-        rotation=2,
+        rotation=0,
     )
 
 
