@@ -1,0 +1,3 @@
+[submodule "ch05/utils"]
+	path = ch05/utils
+	url = https://github.com/raspberrypi/utils.git
