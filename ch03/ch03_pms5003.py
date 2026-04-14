@@ -1,6 +1,6 @@
-from machine import UART, Pin
 import struct
 import time
+import sys
 
 data_format = ">BBHHHHHHHHHHHHHHH"
 mode_passive = b'\xe1\x00\x00'
@@ -17,6 +17,17 @@ read_command.extend(start_of_frame)
 read_command.extend(command_read)
 read_command.extend(sum(read_command).to_bytes(2, "big"))
 
+def available(uart):
+    if sys.implementation.name == "micropython":
+        return uart.any()
+    else:
+        return uart.in_waiting
+
+def get_ticks():
+    if sys.implementation.name == "micropython":
+        return time.ticks_ms()
+    else:
+        return time.monotonic() * 1000
 
 def init_pms5003(uart):
     uart.write(set_passive_command)
@@ -30,18 +41,18 @@ def read_pms5003(uart):
     
     raw_data = bytes()
     got_data = False
-    while uart.any() > 0:
+    while available(uart) > 0:
         # need to loop through to avoid timeout
-        last_data = time.ticks_ms()
-        while time.ticks_ms() < last_data + timeout:
-            if uart.any():
+        last_data = get_ticks()
+        while get_ticks() < last_data + timeout:
+            if available(uart):
                 raw_data += uart.read(1)
         got_data = True
        
     if got_data:
         try:
-            data = struct.unpack(data_format, raw_data)
-            return (data[6],data[7],data[8])
+            data = struct.unpack(data_format, raw_data[:32])
+            return (data[6], data[7], data[8])
         except ValueError:
             return(-1, -1, -1)
             print("data malformed")
@@ -50,6 +61,8 @@ def read_pms5003(uart):
 
 
 if __name__ == "__main__":
+    from machine import UART, Pin
+
     uart = UART(0, 9600, tx=Pin(12), rx=Pin(13))
     init_pms5003(uart)
     
