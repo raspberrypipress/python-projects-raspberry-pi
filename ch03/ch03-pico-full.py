@@ -29,7 +29,7 @@ if wlan.status() != 3:
 else:
     print('Connected.')
     status = wlan.ifconfig()
-    print( 'IP = ' + status[0] )
+    print('IP = ' + status[0])
 
 simple_ntp.set_time()
 
