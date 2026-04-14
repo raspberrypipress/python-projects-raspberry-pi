@@ -7,7 +7,7 @@ from adafruit_bme280 import basic as adafruit_bme280
 from secrets import secrets
 import network
 from machine import UART, Pin
-from ch3_pms5003 import init_pms5003, read_pms5003
+from ch03_pms5003 import init_pms5003, read_pms5003
 
 uart = UART(0, 9600, tx=Pin(12), rx=Pin(13))
 init_pms5003(uart)
