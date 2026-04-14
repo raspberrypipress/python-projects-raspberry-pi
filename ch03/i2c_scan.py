@@ -1,13 +1,13 @@
 import machine
-i2c = machine.I2C(1,scl=Pin(3), sda=Pin(2))
+i2c = machine.I2C(0, scl=machine.Pin(1), sda=machine.Pin(0))
 
-print('Scan i2c bus...')
+print('Scanning i2c bus...')
 devices = i2c.scan()
 
 if len(devices) == 0:
-  print("No i2c device !")
+    print("No i2c devices found!")
 else:
-  print('i2c devices found:',len(devices))
+    print(f"Found {len(devices)} i2c devices.")
 
-  for device in devices:  
-    print("Decimal address: ",device," | Hex address: ",hex(device))
+    for device in devices:  
+        print(f"Decimal addr: {device} | Hex addr: {hex(device)}")
