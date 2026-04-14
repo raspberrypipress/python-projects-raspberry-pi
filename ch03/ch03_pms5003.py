@@ -10,7 +10,8 @@ start_of_frame = bytearray(b'\x42\x4d')
 set_passive_command = bytearray()
 set_passive_command.extend(start_of_frame)
 set_passive_command.extend(mode_passive)
-set_passive_command.extend(sum(set_passive_command).to_bytes(2, "big"))
+set_passive_command.extend(
+    sum(set_passive_command).to_bytes(2, "big"))
 
 read_command = bytearray()
 read_command.extend(start_of_frame)
