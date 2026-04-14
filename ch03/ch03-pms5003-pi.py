@@ -1,5 +1,6 @@
 from ch03_pms5003 import read_pms5003, init_pms5003
 import serial
+import time
 
 uart = serial.Serial('/dev/ttyUSB0')
 init_pms5003(uart)
