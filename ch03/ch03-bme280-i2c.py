@@ -4,7 +4,7 @@ import time
 
 from adafruit_bme280 import basic as adafruit_bme280
 
-i2c=busio.I2C(board.GP1, board.GP0)
+i2c = busio.I2C(board.GP1, board.GP0)
 bme280 = adafruit_bme280.Adafruit_BME280_I2C(i2c)
 
 while True:
