@@ -1,4 +1,4 @@
-import b[1.1]oard
+import board
 import busio
 import time
 import os
