@@ -47,7 +47,6 @@ except OSError:  # open failed
 f.close()
     
 rtc=machine.RTC()
-   
 
 while True:
     # Check free space
