@@ -20,7 +20,6 @@ except OSError:  # open failed
     f = open("data.csv", "w")
     f.write("Time,Temperature,Humidity,Pressure,PM1,PM2.5,PM10\n")
 f.close()
-    
 
 while True:
     # Check free space
