@@ -18,8 +18,8 @@ words = [
     "twenty three", "twenty four", "twenty five", "twenty six",
     "twenty seven", "twenty eight", "twenty nine", "thirty"]
 
-display_width_chars = screen.get_width() // (font.size('a')[0])
-
+avg_char_width = font.get_rect("lw")[2] // 2
+display_width_chars = screen.get_width() // avg_char_width
 line_height = 210
 
 while running:
