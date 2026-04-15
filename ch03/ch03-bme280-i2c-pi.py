@@ -12,4 +12,3 @@ while True:
     print("Humidity: %0.1f %%" % bme280.humidity)
     print("Pressure: %0.1f hPa" % bme280.pressure)
     time.sleep(1)
-
