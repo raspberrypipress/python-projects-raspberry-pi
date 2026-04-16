@@ -369,11 +369,9 @@ class Game:
             except Exception as e:
                 pass
             
-#set up the buttons
+# set up the buttons
 p1_buttons = [Button(17), Button(18)]
-
 p2_buttons = [Button(9), Button(25)]
-
 button_space = Button(5)
 
 def p1_controls():
@@ -388,9 +386,10 @@ def p2_controls():
     move = 0
     if keyboard.m or p2_buttons[1].is_pressed:
         move = PLAYER_SPEED
-    elif keyboard.k or p1_buttons[0].is_pressed:
+    elif keyboard.k or p2_buttons[0].is_pressed:
         move = -PLAYER_SPEED
     return move
+
 
 class State(Enum):
     MENU = 1
@@ -428,10 +427,12 @@ def update():
             game = Game(controls)
         else:
             # Detect up/down keys
-            if num_players == 2 and (keyboard.up or p1_buttons[0].is_pressed):
+            if num_players == 2 and (keyboard.up or
+                                     p1_buttons[0].is_pressed):
                 game.play_sound("up", menu_sound=True)
                 num_players = 1
-            elif num_players == 1 and (keyboard.down or p1_buttons[1].is_pressed):
+            elif num_players == 1 and (keyboard.down or
+                                       p1_buttons[1].is_pressed):
                 game.play_sound("down", menu_sound=True)
                 num_players = 2
 
@@ -454,13 +455,15 @@ def update():
             # Create a new Game object, without any players
             game = Game()
 
+is_fullscreen = False
 def draw():
-    global fullscreen
+    global is_fullscreen
+    if not is_fullscreen:
+        screen.surface = pygame.display.set_mode((WIDTH, HEIGHT),
+                             pygame.FULLSCREEN | pygame.SCALED)
+        is_fullscreen = True
+
     game.draw()
-    
-    if not fullscreen:
-        screen.surface = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN | pygame.SCALED)
-        fullscreen = True
 
     if state == State.MENU:
         menu_image = "menu" + str(num_players - 1)
