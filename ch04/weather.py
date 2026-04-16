@@ -4,7 +4,7 @@ import openmeteo_requests
 import requests_cache
 from retry_requests import retry
 
-#open meteo settings
+# open meteo settings
 cache_session = requests_cache.CachedSession('.cache', expire_after = 3600)
 retry_session = retry(cache_session, retries = 5, backoff_factor = 0.2)
 openmeteo = openmeteo_requests.Client(session = retry_session)
@@ -33,9 +33,10 @@ background.fill(pygame.Color('#000000'))
 manager = pygame_gui.UIManager((800, 600))
 
 
-today_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((10, 10), (150, 50)),
-                                         text='Today',
-                                         manager=manager)
+today_button = pygame_gui.elements.UIButton(
+                 relative_rect=pygame.Rect((10, 10), (150, 50)),
+                 text='Today',
+                 manager=manager)
 
 tomorrow_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((200, 10), (150, 50)),
                                          text='Tomorrow',
@@ -45,17 +46,18 @@ tda_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((400, 10), (
                                          text='The Day After',
                                          manager=manager)
 
-main_text = pygame_gui.elements.UITextBox(html_text = "Getting weather info ...", relative_rect=pygame.Rect((10,100), (400,400)),
-                                          manager = manager)
+main_text = pygame_gui.elements.UITextBox(
+              html_text = "Getting weather info ...", 
+              relative_rect=pygame.Rect((10,100), (400,400)),
+              manager = manager)
 
 clock = pygame.time.Clock()
 is_running = True
 
 weather_time = pygame.event.custom_type()
 pygame.time.set_timer(weather_time, 60*refresh_mins*1000)
-pygame.event.post(pygame.event.Event(weather_time)) # trigger the first weather event at start
+pygame.event.post(pygame.event.Event(weather_time))
 
-    
 changed = True
 
 while is_running:
@@ -80,8 +82,12 @@ while is_running:
             responses = openmeteo.weather_api(url, params=params)
             response = responses[0]
             daily = response.Daily()
-            daily_temperature_2m_max = [daily.Variables(0).Values(0), daily.Variables(0).Values(1),daily.Variables(0).Values(2)]
-            daily_precipitation_probability_max = [daily.Variables(1).Values(0), daily.Variables(1).Values(1), daily.Variables(1).Values(1)]
+            daily_temperature_2m_max = [daily.Variables(0).Values(0), 
+                daily.Variables(0).Values(1),daily.Variables(0).Values(2)]
+
+            daily_precipitation_probability_max = [daily.Variables(1).Values(0), 
+                daily.Variables(1).Values(1), daily.Variables(1).Values(1)]
+
             have_weather_data = True
                 
             try:
@@ -106,7 +112,6 @@ while is_running:
         else:
             main_text.set_text("Waiting on weather data ...")
         changed = False
-
     
     manager.update(time_delta)
     window_surface.blit(background, (0, 0))
