@@ -368,7 +368,7 @@ class Game:
                 getattr(sounds, name + str(random.randint(0, count - 1))).play()
             except Exception as e:
                 pass
-            
+
 # set up the buttons
 p1_buttons = [Button(17), Button(18)]
 p2_buttons = [Button(9), Button(25)]
@@ -490,12 +490,5 @@ state = State.MENU
 # Create a new Game object, without any players
 game = Game()
 
-fullscreen = False
-
-pgzrun.go()
-#set the window fullscreen
-
-
 # Tell Pygame Zero to start - this line is only required when running the game from an IDE such as IDLE or PyCharm
-
-
+pgzrun.go()
