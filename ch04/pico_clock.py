@@ -32,7 +32,8 @@ print("connected")
 simple_ntp.set_time()
 
 tft=st7789.ST7789(
-        SPI(0, baudrate=75_000_000, polarity=1, sck=Pin(2), mosi=Pin(3), miso=None),
+        SPI(0, baudrate=75_000_000, polarity=1, 
+            sck=Pin(2), mosi=Pin(3), miso=None),
         240,
         240,
         reset=Pin(4, Pin.OUT),
@@ -45,7 +46,6 @@ tft=st7789.ST7789(
 now = time.localtime()
 prev_mins = -1
 
-
 while True:
     now = time.localtime()
     if now[4] != prev_mins: # only update if there's a change
@@ -54,7 +54,6 @@ while True:
         col_max = tft.width - font.WIDTH * len(text)
         row_max = tft.height - font.HEIGHT
         tft.fill(0)
-
         tft.text(
             font,
             text,
@@ -64,9 +63,9 @@ while True:
             st7789.color565(0,255,0), #background
         )
     tft.pixel(
-        int(math.sin(math.radians(180+now[5]*6))*100) + 120,
-        int(math.cos(math.radians(180+now[5]*6))*100) + 120,
-        st7789.color565(0,0,255)
+        int(math.sin(math.radians(180-now[5]*6))*100) + 120,
+        int(math.cos(math.radians(180-now[5]*6))*100) + 120,
+        st7789.color565(200,200,255)
         )
-        
+    print(now[5], now[5]*6, 180-now[5]*6)
     time.sleep(0.1)

@@ -132,12 +132,9 @@ def main():
 
         @micropython.native
         def move(self):
-            '''
-            Rotate and move polygon velocity distance.
-            '''
-
-            original = tft.polygon(self.polygon, self.x, self.y, st7789.BLACK, self.angle, 0, 0)
-            
+            original = tft.polygon(self.polygon, self.x, 
+                       self.y, st7789.BLACK, self.angle, 0, 0)
+                    
             if self.spin != 0:
                 self.angle += self.spin
                 if self.angle > rad_max:
@@ -149,9 +146,10 @@ def main():
             self.y += int(self.velocity_y)
             self.x %= width
             self.y %= height
-            
-            new = tft.polygon(self.polygon, self.x, self.y, st7789.WHITE, self.angle, 0, 0)
-            
+                    
+            new = tft.polygon(self.polygon, self.x, self.y, 
+                      st7789.WHITE, self.angle, 0, 0)
+                    
             for i in range(1, len(new)):
                 tft.line(
                     original[i - 1][0],
@@ -167,6 +165,7 @@ def main():
                     new[i][1],
                     st7789.WHITE,
                 )
+
                 
         def blank(self):
             poly = tft.polygon(self.polygon, self.x, self.y, st7789.WHITE, self.angle, 0, 0)
