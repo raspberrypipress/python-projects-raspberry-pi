@@ -19,3 +19,4 @@ if __name__ == "__main__":
     my_neo[1] = (0,100,0)
     my_neo[2] = (0,0,100)
     my_neo.write()
+    print("Done")
