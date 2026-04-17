@@ -1,6 +1,6 @@
 import network
 import time
-from microdot import Microdot
+from microdot.microdot import Microdot
 import _thread
 import secrets as secrets
 
