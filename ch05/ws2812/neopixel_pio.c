@@ -12,17 +12,16 @@ __thread char prevent_segfault;
 
 static PyObject* load_neopixel_sm(PyObject *self, PyObject *args) {
 
-    int sm;
-    uint offset;
-    uint gpio;
-    PIO pio;
-    
-    if (!PyArg_ParseTuple(args, "i", &gpio)) 
-        return NULL;
+ int sm;
+ uint offset;
+ uint gpio;
+ PIO pio;
+ 
+ if (!PyArg_ParseTuple(args, "i", &gpio)) 
+ return NULL;
     
     pio = pio0;
     sm = pio_claim_unused_sm(pio, true);
-    pio_sm_config_xfer(pio, sm, PIO_DIR_TO_SM, 256, 1);
     offset = pio_add_program(pio, &ws2812_program);  
     ws2812_program_init(pio, sm, offset, gpio, 800000.0, false);
     return PyLong_FromLong(sm);
@@ -54,15 +53,17 @@ Py_RETURN_NONE;
 
 // Exported methods are collected in a table
 PyMethodDef method_table[] = {
-    {"load_neopixel_sm", (PyCFunction) load_neopixel_sm, METH_VARARGS, "Load the WS2812 PIO program using the pin number passed as an argument and return the state machine number"},
-    {"send_neopixel_data", (PyCFunction) send_neopixel_data, METH_VARARGS, "Takes an statemachine number and an array and sends the data to the statemachine"},
+    {"load_neopixel_sm", (PyCFunction) load_neopixel_sm, 
+         METH_VARARGS, "Load the WS2812 PIO program"},
+    {"send_neopixel_data", (PyCFunction) send_neopixel_data,
+         METH_VARARGS, "sends data to a statemachine"},
     {NULL, NULL, 0, NULL} // Sentinel value ending the table
-};
+    };
 
 // A struct contains the definition of a module
 PyModuleDef neopixel_pio_module = {
     PyModuleDef_HEAD_INIT,
-    "mymodule", // Module name
+    "neopixel_pio_module", // Module name
     "A WS2812 driver for use with the neopixel_rpi5 module",
     10000,   // Optional size of the module state memory
     method_table,
