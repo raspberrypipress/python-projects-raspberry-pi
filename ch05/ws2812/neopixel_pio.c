@@ -7,6 +7,8 @@
 #include "piolib.h"
 #include "ws2812.pio.h"
 
+__thread char prevent_segfault;
+
 static PyObject* load_neopixel_sm(PyObject *self, PyObject *args) {
 
  int sm;
