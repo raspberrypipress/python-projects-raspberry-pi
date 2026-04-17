@@ -1,25 +1,31 @@
 cmake_minimum_required(VERSION 3.10)
-project(mymodule)
+project(neopixel_pio C)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-find_package(PythonInterp 3.5 REQUIRED)
-
-# This goes after, since it uses PythonInterp as hint
-find_package(PythonLibs 3.5 REQUIRED)
-
-include_directories ("${PYTHON_INCLUDE_DIRS}")
+if (CMAKE_VERSION VERSION_LESS "3.12")
+    find_package(PythonInterp 3 REQUIRED)
+    find_package(PythonLibs 3 REQUIRED)
+    include_directories(${PYTHON_INCLUDE_DIRS})
+else()
+    find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
+    include_directories(${Python3_INCLUDE_DIRS})
+endif()
 
 add_subdirectory(../utils/piolib ./pio_build)
 
-add_library(neopixel_pio SHARED neopixel_pio.c)
+add_library(neopixel_pio MODULE neopixel_pio.c)
+target_include_directories(neopixel_pio PRIVATE ${CMAKE_SOURCE_DIR}/../utils/piolib/include)
 
-include_directories(${CMAKE_SOURCE_DIR}/../utils/piolib/include)
-target_link_libraries(neopixel_pio pio)
+# Do not link the Python library into a Python extension module.
+# The interpreter already provides the Python symbols at runtime.
+target_link_libraries(neopixel_pio PRIVATE pio)
 
 set_target_properties(
     neopixel_pio
     PROPERTIES
         PREFIX ""
         OUTPUT_NAME "neopixel_pio"
+        SUFFIX ".so"
         LINKER_LANGUAGE C
     )
 
