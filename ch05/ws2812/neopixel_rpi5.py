@@ -6,6 +6,7 @@ class NeoPixel:
         self.num_leds = num_leds
         self.data = array.array("I", [0 for _ in range(num_leds)])
         self.sm = neopixel_pio.load_neopixel_sm(gpio)
+        print(self.sm)
         
     def __setitem__(self, pixel, colour):
         self.data[pixel] = colour[2] << 8 | colour[0] << 16 | colour[1] << 24

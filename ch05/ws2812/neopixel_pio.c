@@ -16,15 +16,19 @@ static PyObject* load_neopixel_sm(PyObject *self, PyObject *args) {
  uint offset;
  uint gpio;
  PIO pio;
+ PyObject *rc;
  
  if (!PyArg_ParseTuple(args, "i", &gpio)) 
  return NULL;
     
     pio = pio0;
     sm = pio_claim_unused_sm(pio, true);
+    pio_sm_config_xfer(pio, sm, PIO_DIR_TO_SM, 256, 1);
     offset = pio_add_program(pio, &ws2812_program);  
     ws2812_program_init(pio, sm, offset, gpio, 800000.0, false);
-    return PyLong_FromLong(sm);
+    rc = PyLong_FromLong(sm);
+    fprintf(stderr, "load_neopixel_sm: %d\n", sm);
+    return rc;
 
 }
 
@@ -35,6 +39,7 @@ static PyObject* send_neopixel_data(PyObject *self, PyObject *args) {
     int green;
     int blue;
     Py_buffer data;
+    fprintf(stderr, "send_neopixel_data\n");
 
     pio = pio0;
 
@@ -75,5 +80,7 @@ PyModuleDef neopixel_pio_module = {
 
 // The module init function
 PyMODINIT_FUNC PyInit_neopixel_pio(void) {
+    fprintf(stderr, "init\n");
     return PyModule_Create(&neopixel_pio_module);
 }
+
