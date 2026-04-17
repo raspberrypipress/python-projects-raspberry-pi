@@ -7,9 +7,6 @@
 #include "piolib.h"
 #include "ws2812.pio.h"
 
-__thread char prevent_segfault;
-
-
 static PyObject* load_neopixel_sm(PyObject *self, PyObject *args) {
 
  int sm;
@@ -45,6 +42,7 @@ static PyObject* send_neopixel_data(PyObject *self, PyObject *args) {
     
     pio_sm_config_xfer(pio, sm, PIO_DIR_TO_SM, 256, 1);
     pio_sm_xfer_data(pio, sm, PIO_DIR_TO_SM, data.len, data_array);
+    PyBuffer_Release(&data);
 
 Py_RETURN_NONE;
 
