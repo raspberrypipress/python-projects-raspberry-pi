@@ -9,13 +9,13 @@
 
 static PyObject* load_neopixel_sm(PyObject *self, PyObject *args) {
 
- int sm;
- uint offset;
- uint gpio;
- PIO pio;
+    int sm;
+    uint offset;
+    uint gpio;
+    PIO pio;
  
- if (!PyArg_ParseTuple(args, "i", &gpio)) 
- return NULL;
+    if (!PyArg_ParseTuple(args, "i", &gpio)) 
+        return NULL;
     
     pio = pio0;
     sm = pio_claim_unused_sm(pio, true);
@@ -28,9 +28,6 @@ static PyObject* load_neopixel_sm(PyObject *self, PyObject *args) {
 static PyObject* send_neopixel_data(PyObject *self, PyObject *args) {
     PIO pio;
     int sm;
-    int red;
-    int green;
-    int blue;
     Py_buffer data;
 
     pio = pio0;
@@ -44,7 +41,7 @@ static PyObject* send_neopixel_data(PyObject *self, PyObject *args) {
     pio_sm_xfer_data(pio, sm, PIO_DIR_TO_SM, data.len, data_array);
     PyBuffer_Release(&data);
 
-Py_RETURN_NONE;
+    Py_RETURN_NONE;
 
 }
 
@@ -56,7 +53,7 @@ PyMethodDef method_table[] = {
     {"send_neopixel_data", (PyCFunction) send_neopixel_data,
          METH_VARARGS, "sends data to a statemachine"},
     {NULL, NULL, 0, NULL} // Sentinel value ending the table
-    };
+};
 
 // A struct contains the definition of a module
 PyModuleDef neopixel_pio_module = {

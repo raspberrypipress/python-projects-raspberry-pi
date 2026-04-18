@@ -8,7 +8,9 @@ class NeoPixel:
         self.sm = neopixel_pio.load_neopixel_sm(gpio)
         
     def __setitem__(self, pixel, colour):
-        self.data[pixel] = colour[2] << 8 | colour[0] << 16 | colour[1] << 24
+        self.data[pixel] = (colour[2] << 8 |
+                            colour[0] << 16 |
+                            colour[1] << 24)
         
     def write(self):
         neopixel_pio.send_neopixel_data(self.sm, self.data)
@@ -19,4 +21,3 @@ if __name__ == "__main__":
     my_neo[1] = (0,100,0)
     my_neo[2] = (0,0,100)
     my_neo.write()
-    print("Done")
