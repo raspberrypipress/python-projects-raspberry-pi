@@ -16,8 +16,6 @@ add_subdirectory(../utils/piolib ./pio_build)
 add_library(neopixel_pio MODULE neopixel_pio.c)
 target_include_directories(neopixel_pio PRIVATE ${CMAKE_SOURCE_DIR}/../utils/piolib/include)
 
-# Do not link the Python library into a Python extension module.
-# The interpreter already provides the Python symbols at runtime.
 target_link_libraries(neopixel_pio PRIVATE pio)
 
 set_target_properties(
