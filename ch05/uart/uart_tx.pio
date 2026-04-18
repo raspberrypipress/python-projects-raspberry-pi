@@ -26,9 +26,9 @@ static inline void uart_tx_program_init(PIO pio, uint sm,
                                         uint baud) {
     // Tell PIO to initially drive output-high on the selected pin, then map PIO
     // onto that pin with the IO muxes.
-    pio_sm_set_pins_with_mask64(pio, sm, 
+    pio_sm_set_pins_with_mask(pio, sm, 
         1ull << pin_tx, 1ull << pin_tx);
-    pio_sm_set_pindirs_with_mask64(pio, sm, 
+    pio_sm_set_pindirs_with_mask(pio, sm, 
         1ull << pin_tx, 1ull << pin_tx);
     pio_gpio_init(pio, pin_tx);
 
