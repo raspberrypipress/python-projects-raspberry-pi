@@ -81,7 +81,7 @@ static PyObject* send_uart_data(PyObject *self, PyObject *args) {
     if (!PyArg_ParseTuple(args, "iy*", &sm, &data)) 
         return NULL;
     uint32_t *data_array = (uint32_t *)data.buf;
-    uart_tx_program_puts(pio, sm, data_array);
+    uart_tx_program_puts(pio, sm, (char*) data_array);
 
     PyBuffer_Release(&data);
     Py_RETURN_NONE;
