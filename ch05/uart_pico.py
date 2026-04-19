@@ -37,7 +37,7 @@ class UART:
         self.sm_tx = rp2.StateMachine(0, uart_tx, freq=8*baud,
             out_base=gpio_tx, sideset_base=gpio_tx)
         self.sm_rx = rp2.StateMachine(1, uart_rx, freq=8*baud,
-            in_base=gpio_rx)
+            in_base=gpio_rx, jmp_pin=gpio_rx)
         self.sm_tx.active(1)
         self.sm_rx.active(1)
         
