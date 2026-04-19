@@ -15,7 +15,6 @@ static PyObject* load_uart_tx_sm(PyObject *self, PyObject *args) {
     uint gpio;
     uint baud;
     PIO pio;
-    
     if (!PyArg_ParseTuple(args, "ii", &gpio, &baud)) 
         return NULL;    
 
@@ -71,8 +70,8 @@ static PyObject* get_uart_data(PyObject *self, PyObject *args) {
     return Py_BuildValue("y", data);
 }
 
-//NOTE -- C strings for uart are 8 bit chars. This doesn't map to Python
-// looks like it actually puts charachters as a uint32_c
+// NOTE -- C strings for uart are 8 bit chars. This doesn't map to Python
+// looks like it actually puts characters as a uint32_c
 static PyObject* send_uart_data(PyObject *self, PyObject *args) {
     PIO pio;
     int sm;
@@ -87,9 +86,7 @@ static PyObject* send_uart_data(PyObject *self, PyObject *args) {
 
     PyBuffer_Release(&data);
     Py_RETURN_NONE;
-
 }
-
 
 // Exported methods are collected in a table
 PyMethodDef method_table[] = {
