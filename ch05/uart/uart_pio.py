@@ -18,4 +18,6 @@ if __name__ == "__main__":
         data = uart.read()
         if data: # if we got some data, print it
             print(data)
+            # send it back, backwards, just for fun
+            uart.send(data[::-1])
         time.sleep(1)
