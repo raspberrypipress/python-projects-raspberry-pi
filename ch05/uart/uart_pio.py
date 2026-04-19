@@ -19,5 +19,5 @@ if __name__ == "__main__":
         if data: # if we got some data, print it
             print(data)
             # send it back, backwards, just for fun
-            uart.send(data[::-1])
+            uart.send(data[::-1].encode("ascii"))
         time.sleep(1)
