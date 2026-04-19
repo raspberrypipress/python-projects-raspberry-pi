@@ -67,7 +67,7 @@ static PyObject* get_uart_data(PyObject *self, PyObject *args) {
         data[i] = (char)(ret>>24);
     }
     data[size] = '\0';
-    return Py_BuildValue("y", data);
+    return Py_BuildValue("s", data);
 }
 
 // NOTE -- C strings for uart are 8 bit chars. This doesn't map to Python

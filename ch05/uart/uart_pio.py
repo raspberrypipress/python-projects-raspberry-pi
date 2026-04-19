@@ -15,5 +15,7 @@ class UART:
 if __name__ == "__main__":        
     uart = UART(3, 2, 9600)
     while True:
-        print(uart.read())
+        data = uart.read()
+        if data: # if we got some data, print it
+            print(data)
         time.sleep(1)
