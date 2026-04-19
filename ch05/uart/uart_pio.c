@@ -8,7 +8,6 @@
 #include "uart_tx.pio.h"
 #include "uart_rx.pio.h"
 
-
 static PyObject* load_uart_tx_sm(PyObject *self, PyObject *args) {
 
     int sm;
