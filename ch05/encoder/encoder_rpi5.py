@@ -15,9 +15,10 @@ if __name__ == "__main__":
     import time
     
     encoder = Encoder(2)
+    last_value = None
     while True:
-        for i in range(10):
-            print(encoder.read())
-            time.sleep(1)
-        print("Zeroing")
-        encoder.zero()
+        value = encoder.read()
+        if value != last_value:
+            print(value)
+        last_value = value
+        time.sleep(.1)
