@@ -42,15 +42,14 @@ class UART:
         self.sm_rx.active(1)
         
     def send(self, data):
-        print("puttin: ", data)
+        print("Sending: ", data)
         self.sm_tx.put(data)
         
     def read(self):
         data = []
         while (self.sm_rx.rx_fifo() > 0):
-            print(self.sm_rx.rx_fifo())
             data.append(chr(self.sm_rx.get() >> 24))
-        return data
+        return "".join(data)
     
 if __name__ == "__main__":
     uart = UART(2, 3, 9600)
