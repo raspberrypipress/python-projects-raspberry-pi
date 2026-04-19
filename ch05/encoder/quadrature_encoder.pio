@@ -96,7 +96,8 @@ increment_cont:
 // if the application doesn't require a very high sampling rate. Passing zero
 // will set the clock to the maximum
 
-static inline void quadrature_encoder_program_init(PIO pio, uint sm, uint pin, int max_step_rate)
+static inline void quadrature_encoder_program_init(
+        PIO pio, uint sm, uint pin, int max_step_rate)
 {
     pio_sm_set_consecutive_pindirs(pio, sm, pin, 2, false);
     pio_gpio_init(pio, pin);
@@ -105,13 +106,14 @@ static inline void quadrature_encoder_program_init(PIO pio, uint sm, uint pin, i
     gpio_pull_up(pin);
     gpio_pull_up(pin + 1);
 
-    pio_sm_config c = quadrature_encoder_program_get_default_config(0);
+    pio_sm_config c =
+        quadrature_encoder_program_get_default_config(0);
 
     sm_config_set_in_pins(&c, pin); // for WAIT, IN
     sm_config_set_jmp_pin(&c, pin); // for JMP
     // shift to left, autopull disabled
     sm_config_set_in_shift(&c, false, false, 32);
-    // don't join FIFO's
+    // don't join FIFOs
     sm_config_set_fifo_join(&c, PIO_FIFO_JOIN_NONE);
 
     // passing "0" as the sample frequency,
@@ -119,7 +121,8 @@ static inline void quadrature_encoder_program_init(PIO pio, uint sm, uint pin, i
         sm_config_set_clkdiv(&c, 1.0);
     } else {
         // one state machine loop takes at most 10 cycles
-        float div = (float)clock_get_hz(clk_sys) / (10 * max_step_rate);
+        float div = (float)clock_get_hz(clk_sys) / 
+                    (10 * max_step_rate);
         sm_config_set_clkdiv(&c, div);
     }
 

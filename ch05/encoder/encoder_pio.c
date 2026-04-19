@@ -7,34 +7,35 @@
 #include "piolib.h"
 #include "quadrature_encoder.pio.h"
 
-__thread char prevent_segfault;
-
 static PyObject* load_encoder_sm(PyObject *self, PyObject *args) {
 
-    int sm;
-    uint offset;
-    uint gpio;
-    PIO pio;
-    
-    if (!PyArg_ParseTuple(args, "i", &gpio)) 
-        return NULL;    
-        
+   int sm;
+   uint offset;
+   uint gpio;
+   PIO pio;
+ 
+   if (!PyArg_ParseTuple(args, "i", &gpio)) 
+       return NULL; 
+ 
     pio = pio0;
     sm = pio_claim_unused_sm(pio, true);
 
     pio_sm_config_xfer(pio, sm, PIO_DIR_TO_SM, 256, 1);
     
-    pio_clear_instruction_memory(pio); // a bit risky? This will do it for everything and could break other hardware running even if we don't want it? leave for now.
+    // is the pio_clear a bit risky? This will do it for 
+    // everything and could break other hardware running
+    // even if we don't want it? leave for now.
+    pio_clear_instruction_memory(pio); 
     offset = pio_add_program(pio, &quadrature_encoder_program);
 
     pio_sm_clear_fifos(pio, sm);
-    
+ 
     quadrature_encoder_program_init(pio,sm,gpio,0);
     return PyLong_FromLong(sm);
-
 }
 
-static PyObject* get_encoder_data(PyObject *self, PyObject *args) {
+static PyObject* get_encoder_data(PyObject *self, 
+                                  PyObject *args) {
     PIO pio;
     int sm;
     int n;
@@ -45,9 +46,9 @@ static PyObject* get_encoder_data(PyObject *self, PyObject *args) {
 
     if (!PyArg_ParseTuple(args, "i", &sm)) 
         return NULL;
-    
 
-    return PyLong_FromLong(quadrature_encoder_get_count(pio,sm));
+    return PyLong_FromLong(
+        quadrature_encoder_get_count(pio,sm));
 }
 
 // Exported methods are collected in a table
