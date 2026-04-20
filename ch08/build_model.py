@@ -29,9 +29,9 @@ def rolling_av(data, index):
 
 with open('wand_data.csv') as csvfile:
     flickreader = csv.reader(csvfile, delimiter=',')
-counter = 0
-for row in flickreader:
-    data.append(row)
+    counter = 0
+    for row in flickreader:
+        data.append(row)
      
 for index in range(10, len(data)):
     windows.append(
