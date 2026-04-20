@@ -5,7 +5,6 @@ import machine
 button = machine.Pin(0, machine.Pin.IN, machine.Pin.PULL_UP)
 i2c = machine.I2C(0, sda=machine.Pin(16), scl=machine.Pin(17))
 
-print(i2c.scan())
 sensor = LSM6DS3(i2c, mode=NORMAL_MODE_104HZ, address=0x6b)
 
 while True:
