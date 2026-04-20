@@ -1,0 +1,148 @@
+<head>
+    <title>LED Controller</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+<h1>Pico W LED Controller</h1>
+<p><a href="{{ url_for('logout') }}">Logout</a></p>
+
+<h2>LED Preview</h2>
+<div id="led-display"></div>
+
+<script>
+const brightnessScale = 30;
+const gamma = 2.2;
+
+function brighten(hex) {
+    const toGamma = (component) => {
+        const scaled = Math.min(255, parseInt(component, 16) * brightnessScale);
+        const normalized = scaled / 255;
+        const corrected = Math.pow(normalized, 1 / gamma);
+        return Math.round(corrected * 255);
+    };
+
+    const r = toGamma(hex.slice(1,3));
+    const g = toGamma(hex.slice(3,5));
+    const b = toGamma(hex.slice(5,7));
+    return `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`;
+}
+
+async function updateLeds() {
+    const resp = await fetch("{{ url_for('led_state') }}");
+    const data = await resp.json();
+    const container = document.getElementById('led-display');
+    container.innerHTML = '';
+    for (const color of data.leds) {
+        const span = document.createElement('span');
+        span.style.display = 'inline-block';
+        span.style.width = '10px';
+        span.style.height = '10px';
+        span.style.marginRight = '2px';
+        span.style.backgroundColor = brighten(color);
+        container.appendChild(span);
+    }
+}
+setInterval(updateLeds, 100);
+updateLeds();
+
+</script>
+
+<div id="content">
+    <div id="settings">
+
+        <form method="POST" action="">
+                 Pattern:
+                 <select name="pattern" id="pattern">
+                     {% for name in pattern_options %}
+                     <option value="{{ name }}" {% if name == pattern %}selected{% endif %}>{{ name }}</option>
+                     {% endfor %}
+                 </select>
+                <input type="submit" value="Set Pattern">
+        </form>
+
+        <form method="POST" action="">
+                Number of LEDs:
+                <input type="text" id="num_leds" name="num_leds" value = {{ num_leds }}>
+                <input type="submit" value="Set number of LEDs">
+        </form>
+
+         <form method="POST" action="">
+                 Maximum brightness:
+                 <input type="range" id="max_brightness" name="max_brightness" min="0" max="100" value="{{max_brightness}}">
+                 <input type="submit" value="Set brightness">
+         </form>
+
+         <form method="POST" action="">
+                 Speed:
+                 <input type="range" id="speed" name="speed" min="0" max="100" value="{{speed}}">
+                 <input type="submit" value="Set speed">
+         </form>
+
+        <form method="POST" action="">
+                Size:
+                <input type="range" id="size" name="size" min="0" max="100" value="{{size}}">
+                <input type="submit" value="Set size">
+        </form>
+
+        <form method="POST" action="">
+                Colours:
+                {% for i in range(5) %}
+                <label for="colour{{i}}">Colour {{ i + 1 }}:</label>
+                <input type="color" id="colour{{i}}" name="colour{{i}}" value="{{ colours[i] }}">
+                {% endfor %}
+                <input type="submit" value="Set colours">
+        </form>
+
+         {% if paused %}
+         <form method="POST" action="">
+                 <input type="submit" name="resume" value="Continue">
+         </form>
+         {% else %}
+         <form method="POST" action="">
+                 <input type="submit" name="pause" value="Pause">
+         </form>
+         {% endif %}
+         <p><a href="{{ url_for('list_patterns') }}">Edit pattern files</a></p>
+         <p><a href="{{ url_for('generate_code') }}" target="_blank">View Python code</a></p>
+    </div>
+    <div id="presets">
+        <h2>Presets</h2>
+        <ul>
+        {% for p in presets %}
+            <li>{{ p }}
+                <form method="POST" action="{{ url_for('load_preset_route') }}" style="display:inline;">
+                    <input type="hidden" name="name" value="{{ p }}">
+                    <input type="submit" value="Load">
+                </form>
+                <form method="POST" action="{{ url_for('save_preset_route') }}" style="display:inline;">
+                    <input type="hidden" name="name" value="{{ p }}">
+                    <input type="submit" value="Update">
+                </form>
+                <form method="POST" action="{{ url_for('delete_preset_route') }}" style="display:inline;">
+                    <input type="hidden" name="name" value="{{ p }}">
+                    <input type="submit" value="Delete">
+                </form>
+            </li>
+        {% endfor %}
+        </ul>
+        <form method="POST" action="{{ url_for('save_preset_route') }}">
+            <input type="text" name="name" placeholder="Preset name">
+            <input type="submit" value="Create Preset">
+        </form>
+    </div>
+</div>
+
+{% if errors %}
+<div id="errors">
+    <p>The following errors occurred while loading patterns:</p>
+    <ul>
+    {% for error in errors %}
+        <li>{{ error }}</li>
+    {% endfor %}
+    </ul>
+ </div>
+{% endif %}
+</body>
+</html>
+
+

@@ -1,0 +1,3 @@
+* Each pattern should be in it's own file
+* the filename should start with pattern_
+* pattern modules must define a ``Pattern`` class inheriting from ``BasePattern``

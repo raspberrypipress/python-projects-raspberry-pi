@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit {{ filename }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+</head>
+<body>
+<h1>Edit {{ filename }}</h1>
+<h2>LED Preview</h2>
+<div id="led-display"></div>
+<script>
+const brightnessScale = 30;
+
+function brighten(hex) {
+    const r = Math.min(255, Math.round(parseInt(hex.slice(1,3), 16) * brightnessScale));
+    const g = Math.min(255, Math.round(parseInt(hex.slice(3,5), 16) * brightnessScale));
+    const b = Math.min(255, Math.round(parseInt(hex.slice(5,7), 16) * brightnessScale));
+    return `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`;
+}
+
+async function updateLeds() {
+    const resp = await fetch("{{ url_for('led_state') }}");
+    const data = await resp.json();
+    const container = document.getElementById('led-display');
+    container.innerHTML = '';
+    for (const color of data.leds) {
+        const span = document.createElement('span');
+        span.style.display = 'inline-block';
+        span.style.width = '10px';
+        span.style.height = '10px';
+        span.style.marginRight = '2px';
+        span.style.backgroundColor = brighten(color);
+        container.appendChild(span);
+    }
+}
+setInterval(updateLeds, 100);
+updateLeds();
+</script>
+<form method="POST">
+    <textarea name="content" rows="20" cols="80">{{ content }}</textarea><br>
+    <input type="submit" name="action" value="Save">
+    <input type="submit" name="action" value="Save and Run"><br>
+    <label for="new_filename">New filename:</label>
+    <input type="text" id="new_filename" name="new_filename" placeholder="pattern_new.py">
+    <input type="submit" name="action" value="Save as New File">
+</form>
+{% if errors %}
+<div id="errors">
+    <p>The following errors occurred:</p>
+    <ul>
+    {% for error in errors %}
+        <li>{{ error }}</li>
+    {% endfor %}
+    </ul>
+</div>
+{% endif %}
+<a href="{{ url_for('list_patterns') }}">Back to list</a>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
+<script>
+    const editor = CodeMirror.fromTextArea(document.querySelector('textarea[name="content"]'), {
+        lineNumbers: true,
+        mode: 'python',
+        indentUnit: 4
+    });
+    document.querySelector('form').addEventListener('submit', () => editor.save());
+</script>
+</body>
+</html>

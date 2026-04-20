@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>LED Pattern Controller</title>
+  </head>
+  <body>
+    <h1>LED Pattern Controller</h1>
+    {% if error %}
+    <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    <form method="post">
+      <label for="pattern">Pattern:</label>
+      <select id="pattern" name="pattern">
+        {% for name in patterns %}
+        <option value="{{ name }}" {% if name == current_pattern %}selected{% endif %}>{{ name }}</option>
+        {% endfor %}
+      </select>
+      <br>
+      <label for="num_leds">Number of LEDs:</label>
+      <input id="num_leds" type="number" name="num_leds" value="{{ num_leds }}" min="1">
+      <br>
+      <button type="submit">Start</button>
+    </form>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Patterns</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+<h1>Edit Pattern Files</h1>
+<a href="{{ url_for('create_pattern_file') }}">Create new pattern</a>
+<ul>
+{% for file in files %}
+    <li><a href="{{ url_for('edit_pattern_file', filename=file) }}">{{ file }}</a></li>
+{% endfor %}
+</ul>
+<a href="{{ url_for('home') }}">Back</a>
+</body>
+</html>
