@@ -27,7 +27,7 @@ def rolling_av(data, index):
         return 1
     return 0
 
-with open('flick.csv') as csvfile:
+with open('wand_data.csv') as csvfile:
     flickreader = csv.reader(csvfile, delimiter=',')
 counter = 0
 for row in flickreader:
