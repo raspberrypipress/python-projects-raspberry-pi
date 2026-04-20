@@ -47,8 +47,7 @@ for index in range(10, len(data)):
            data[index-6][3],data[index-5][3],data[index-4][3],
            data[index-3][3],data[index-2][3],data[index-1][3],
            data[index][3]]))
-
-window_res.append(rolling_av(data, index))
+    window_res.append(rolling_av(data, index))
 
 estimator = RandomForestClassifier(n_estimators=20, 
                 max_depth=15, max_features=7, random_state=1)
