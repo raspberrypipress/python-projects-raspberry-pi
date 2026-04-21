@@ -8,14 +8,13 @@ from secrets import secrets
 LED_PIN = 0          # Pin connected to the WS2812b
 NUM_LEDS = 16        # Number of LEDs in the string
 ARTNET_PORT = 6454   # Standard Art-Net port
-UNIVERSE_PINS = [1, 5, 18, 13, 22]  
+UNIVERSE_PINS = [1, 5, 18, 13, 22]  # [LSB, ..., MSB]
 universe = 0
 for i, pin_num in enumerate(UNIVERSE_PINS):
     pin = machine.Pin(pin_num, machine.Pin.IN, machine.Pin.PULL_UP)
     # Pins pulled low mean "0", left floating or high mean "1"
     bit = not pin.value()  # Pin reads 0 if pulled low, so invert
     universe |= (bit << i)
-
 UNIVERSE = universe
 print("Selected Art-Net universe:", UNIVERSE)
 
