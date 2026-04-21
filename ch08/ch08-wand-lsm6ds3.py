@@ -43,7 +43,7 @@ while True:
     window.append(reading[1] * multiplier)
     window.append(reading[2] * multiplier)
     model.predict(array.array('h', window), resout)
-    if(resout[1] > 0.60):
+    if(resout[1] > 0.70):
         print(f"flick detected at {ticks_ms()} ",
               f"{resout[1]}% certainty")
         run_sparkle = True
