@@ -2,7 +2,7 @@ from llama_cpp import Llama
 model_file = "/path/to/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf"
 llm = Llama(model_path=model_file , chat_format="chatml")
 while True:
-    question = input("what is your question?")
+    question = input("what is your question? ")
     output = llm.create_chat_completion(
     messages=[
         {
@@ -11,7 +11,7 @@ while True:
                 "helpful answers with only a few words"),
             },
             {"role": "user", "content": question},
-        ],temperature=0.7,max_tokens = 40)
+        ], temperature=0.7, max_tokens = 40)
 
     response = output['choices'][0]['message']['content']
     print(output['choices'][0]['message']['content'])  
