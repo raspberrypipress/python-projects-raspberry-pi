@@ -18,7 +18,7 @@ buttons = [
     [Pin(4,Pin.IN,Pin.PULL_UP), KeyCode.RIGHT],
     [Pin(5,Pin.IN,Pin.PULL_UP), KeyCode.LEFT],
     [Pin(17,Pin.IN,Pin.PULL_UP), KeyCode.SPACE], #Fire
-    [Pin(9,Pin.IN,Pin.PULL_UP), KeyCode.UP], #A second accellerate
+    [Pin(9,Pin.IN,Pin.PULL_UP), KeyCode.UP], #A second accelerate
     [Pin(21,Pin.IN,Pin.PULL_UP), KeyCode.V], #Skid
     [Pin(13,Pin.IN,Pin.PULL_UP), KeyCode.N], #Nitro
     ]
@@ -30,15 +30,12 @@ def get_buttons():
         if not button[0].value():
             current_buttons.append(i)
 
-
 def keypad_example():
     global current_buttons, last_buttons
-    
     k = KeyboardInterface()
     usb.device.get().init(k, builtin_driver=True)
     while not k.is_open():
         time.sleep_ms(100)
-    
 
     while True:
         time.sleep(0.01)
@@ -51,13 +48,11 @@ def keypad_example():
         for num in last_buttons:
             if num not in current_buttons:
                 change=True
-        print(change)
         last_buttons = current_buttons
         send_keys= []
         for button in current_buttons:
             send_keys.append(buttons[button][1])
         if change:
-            print(send_keys)
             k.send_keys(send_keys)
 
 keypad_example()
