@@ -33,7 +33,7 @@ with open('flick_model.csv', 'r') as f:
     emlearn_trees.load_model(model, f)
 
 resout = array.array('f',[0,0])
-window = array.array('h',[0]*30)
+window = [0]*30
 
 print("running")
 while True:
