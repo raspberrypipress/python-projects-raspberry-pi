@@ -35,7 +35,7 @@ with open('flick_model.csv', 'r') as f:
     emlearn_trees.load_model(model, f)
 
 resout = array.array('f',[0,0])
-window = [0]*30
+window = [0] * 30
 
 print("running")
 while True:
@@ -44,8 +44,8 @@ while True:
     window.append(reading[0] * multiplier)
     window.append(reading[1] * multiplier)
     window.append(reading[2] * multiplier)
-    model.predict(window[i], resout)
-    if(resout[1] > 0.40):
+    model.predict(array.array('h', window), resout)
+    if(resout[1] > 0.60):
         print(f"flick detected at {ticks_ms()} ",
               f"{resout[1]}% certainty")
         run_sparkle = True

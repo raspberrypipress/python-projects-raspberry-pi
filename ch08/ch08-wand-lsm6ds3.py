@@ -24,7 +24,7 @@ def core1_loop():
 _thread.start_new_thread(core1_loop, ())
 
 i2c = machine.I2C(0, sda=machine.Pin(16), scl=machine.Pin(17))
-sensor = LSM6DS3(i2c, mode=NORMAL_MODE_104HZ, address=0x6b)
+accel = LSM6DS3(i2c, mode=NORMAL_MODE_104HZ, address=0x6b)
 
 print("loading model")
 model = emlearn_trees.new(300, 10000, 200)
@@ -33,17 +33,17 @@ with open('flick_model.csv', 'r') as f:
     emlearn_trees.load_model(model, f)
 
 resout = array.array('f',[0,0])
-window = [0]*30
+window = [0] * 30
 
 print("running")
 while True:
     del window[:3] # Remove the first 3 elements
-    reading = sensor.get_readings()
+    reading = accel.get_reading()
     window.append(reading[0] * multiplier)
     window.append(reading[1] * multiplier)
     window.append(reading[2] * multiplier)
-    model.predict(window[i], resout)
-    if(resout[1] > 0.40):
+    model.predict(array.array('h', window), resout)
+    if(resout[1] > 0.60):
         print(f"flick detected at {ticks_ms()} ",
               f"{resout[1]}% certainty")
         run_sparkle = True
