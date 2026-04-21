@@ -8,6 +8,7 @@ from lsm6ds3 import LSM6DS3, NORMAL_MODE_104HZ # https://github.com/pimoroni/lsm
 import neopixel
 #from led_helpers import hsv_to_rgb, sparkle
 
+multiplier = 1000
 run_sparkle = False
 #np = neopixel.NeoPixel(machine.Pin(2), 10)
 
@@ -32,22 +33,18 @@ with open('flick_model.csv', 'r') as f:
     emlearn_trees.load_model(model, f)
 
 resout = array.array('f',[0,0])
-
-window  =[]
-for i in range(10):
-    window.append(array.array('h',[0]*30))
+window = array.array('h',[0]*30)
 
 print("running")
 while True:
-    for i in range(10):
-        reading = sensor.get_readings()
-        for j in range(10):
-            window[i][(i+j)%10] = int(reading[0]*1000)
-            window[i][(i+j)%10+10] = int(reading[1]*1000)
-            window[i][(i+j)%10+20] = int(reading[2]*1000)
-        sleep(0.1)
-        model.predict(window[i], resout)
-        if(resout[1] > 0.73):
-            print("flick detected at ", ticks_ms())
-            run_sparkle = True
-
+    del window[:3] # Remove the first 3 elements
+    reading = sensor.get_readings()
+    window.append(reading[0] * multiplier)
+    window.append(reading[1] * multiplier)
+    window.append(reading[2] * multiplier)
+    model.predict(window[i], resout)
+    if(resout[1] > 0.40):
+        print(f"flick detected at {ticks_ms()} ",
+              f"{resout[1]}% certainty")
+        run_sparkle = True
+    sleep(0.1)
