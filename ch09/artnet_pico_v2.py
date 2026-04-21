@@ -3,6 +3,7 @@ import socket
 import neopixel
 import machine
 import time
+import struct
 from secrets import secrets
 
 LED_PIN = 0          # Pin connected to the WS2812b
