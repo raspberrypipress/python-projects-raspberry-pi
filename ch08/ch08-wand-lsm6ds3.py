@@ -47,4 +47,6 @@ while True:
         print(f"flick detected at {ticks_ms()} ",
               f"{resout[1]}% certainty")
         run_sparkle = True
+        # Clear the window to avoid multiple detections
+        window = [0] * 30
     sleep(0.1)
