@@ -152,7 +152,7 @@ def rainbow_cycle(remote, wait=0.02):
             time.sleep(wait)
 
 if __name__ == "__main__":
-    nodes = RemoteNeopixel.scan_for_universe(target_universe=1,
+    nodes = RemoteNeopixel.scan_for_universe(target_universe=0,
                                              timeout=10)
     if not nodes:
         print("No Art-Net nodes found")
@@ -161,18 +161,21 @@ if __name__ == "__main__":
         for node in nodes:
             print(node)
             
-    print("running a rainbow on universe 1")
+    print("running a rainbow on universe 0")
     
-    ip_addr = RemoteNeopixel.get_ip_from_universe(nodes, 1)
+    ip_addr = RemoteNeopixel.get_ip_from_universe(nodes, 0)
             
     print(ip_addr)
     
     NUM_PIXELS = 10  # Set to your number of pixels
-    remote = RemoteNeopixel(universe=1, 
+    remote = RemoteNeopixel(universe=0, 
                             num_pixels=NUM_PIXELS, 
                             ip=ip_addr)
-    print("Running rainbow_cycle! Press Ctrl+C to exit.")
-    try:
-        rainbow_cycle(remote, wait = 0.01)
-    except KeyboardInterrupt:
-        print("\nStopped.")
+    if ip_addr:
+        try:
+            print("Running rainbow_cycle! Press Ctrl+C to exit.")
+            rainbow_cycle(remote, wait = 0.01)
+        except KeyboardInterrupt:
+            print("\nStopped.")
+    else:
+        print("No nodes found, stopping.")
