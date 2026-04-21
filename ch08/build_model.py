@@ -34,19 +34,11 @@ with open('wand_data.csv') as csvfile:
         data.append(row)
      
 for index in range(10, len(data)):
-    windows.append(
-        to_int([data[index-10][1], data[index-9][1], 
-           data[index-8][1],data[index-7][1],data[index-6][1],
-           data[index-5][1],data[index-4][1],data[index-3][1],
-           data[index-2][1],data[index-1][1],data[index][1],
-           data[index-10][2],data[index-9][2],data[index-8][2],
-           data[index-7][2],data[index-6][2],data[index-5][2],
-           data[index-4][2],data[index-3][2],data[index-2][2],
-           data[index-1][2],data[index][2],data[index-10][3],
-           data[index-9][3],data[index-8][3],data[index-7][3],
-           data[index-6][3],data[index-5][3],data[index-4][3],
-           data[index-3][3],data[index-2][3],data[index-1][3],
-           data[index][3]]))
+    predictor = []
+    for y in range(1, 4):
+        for x in range(-10, 1):
+            predictor.append(data[index+x][y])
+    windows.append(to_int(predictor))
     window_res.append(rolling_av(data, index))
 
 estimator = RandomForestClassifier(n_estimators=20, 
