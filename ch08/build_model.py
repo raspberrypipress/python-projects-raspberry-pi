@@ -1,7 +1,6 @@
 import csv
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import get_scorer
-import numpy as np
 import emlearn
 
 current_window = []
@@ -35,9 +34,9 @@ with open('wand_data.csv') as csvfile:
      
 for index in range(10, len(data)):
     predictor = []
-    for y in range(1, 4):
-        for x in range(-10, 1):
-            predictor.append(data[index+x][y])
+    for y in range(0, 3):
+        for x in range(-window_size, 0):
+            predictor.append(data[index + x][y + 1])
     windows.append(to_int(predictor))
     window_res.append(rolling_av(data, index))
 
