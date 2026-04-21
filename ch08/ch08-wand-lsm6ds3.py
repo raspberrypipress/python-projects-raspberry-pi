@@ -38,7 +38,7 @@ window = [0] * 30
 print("running")
 while True:
     del window[:3] # Remove the first 3 elements
-    reading = accel.get_reading()
+    reading = accel.get_readings()
     window.append(reading[0] * multiplier)
     window.append(reading[1] * multiplier)
     window.append(reading[2] * multiplier)
