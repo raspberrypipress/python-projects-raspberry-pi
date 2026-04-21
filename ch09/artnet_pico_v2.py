@@ -48,7 +48,8 @@ print("Listening for Art-Net...")
 
 def send_artpoll_reply(dest_ip):
     print("got poll request")
-    ip_parts = [int(x) for x in get_ip().split('.')]
+    my_ip = wlan.ifconfig()[0]
+    ip_parts = [int(x) for x in my_ip.split('.')]
     short_name = "MicroPy Node"
     long_name = "MicroPython ArtNet"
     short_name_bytes = bytes(short_name, 'ascii') + \
