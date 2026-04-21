@@ -92,7 +92,7 @@ def parse_artnet_packet(packet, addr):
 
 while True:
     pkt, addr = sock.recvfrom(1024)
-    data = parse_artnet_packet(pkt)
+    data = parse_artnet_packet(pkt, addr)
     if data:
         print("Received Art-Net DMX data:", list(data))
         # Art-Net DMX data is just a stream of bytes
