@@ -1,17 +1,14 @@
 import board
 import busio
 import digitalio
-import datetime
 import time
 from Adafruit_IO import Client, Feed
 from adafruit_bme280 import basic as adafruit_bme280
-
 
 ADAFRUIT_AIO_USERNAME = "xyz"
 ADAFRUIT_AIO_KEY      = "XYZ"
 
 aio = Client(ADAFRUIT_AIO_USERNAME, ADAFRUIT_AIO_KEY)
-feed_temp = "temp"
 
 def create_feed(name):
     feed = Feed(name=name)
