@@ -19,8 +19,6 @@ def create_feed(name):
     
 create_feed("temp")
 create_feed("humidity")
-temp_key = aio.feeds("temp").key
-humidity_key = aio.feeds("humidity").key
 
 spi = busio.SPI(board.D11, MISO=board.D9, MOSI=board.D10)
 cs = digitalio.DigitalInOut(board.D22)
@@ -29,7 +27,7 @@ bme280 = adafruit_bme280.Adafruit_BME280_SPI(spi, cs)
 while True:
     print("\nTemperature: %0.1f C" % bme280.temperature)
     print("Humidity: %0.1f %%" % bme280.humidity)
-    aio.send_data(temp_key, bme280.temperature)
-    aio.send_data(humidity_key, bme280.humidity)
+    aio.send_data("temp", bme280.temperature)
+    aio.send_data("humidity", bme280.humidity)
 
     time.sleep(5)
