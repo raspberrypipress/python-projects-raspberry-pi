@@ -1,7 +1,6 @@
 import board
 import busio
 import digitalio
-import datetime
 import time
 from Adafruit_IO import MQTTClient
 
@@ -15,7 +14,8 @@ aio = MQTTClient(ADAFRUIT_AIO_USERNAME, ADAFRUIT_AIO_KEY)
 
 def message(client, feed_id, payload):
     global running
-    print('Feed {0} received new value: {1}'.format(feed_id, payload))
+    print('Feed {0} received new value: {1}'.format(
+          feed_id, payload))
     if payload == 'ON':
         running = True
     if payload == 'OFF':
