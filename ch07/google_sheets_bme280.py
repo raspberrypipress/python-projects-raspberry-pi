@@ -22,4 +22,4 @@ while True:
     print("Humidity: %0.1f %%" % bme280.humidity)
     worksheet.append_row([str(datetime.datetime.now()),
         bme280.temperature,bme280.humidity])
-    time.sleep(1)
+    time.sleep(30)
