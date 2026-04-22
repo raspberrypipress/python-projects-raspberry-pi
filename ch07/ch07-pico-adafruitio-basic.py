@@ -18,8 +18,8 @@ print("Connected to WiFi")
 mqtt_client = MQTTClient(
         client_id="",
         server=mqtt_host,
-        user=secrets['aio_username'] ,
-        password=secrets['aio_key'] ,
+        user=secrets['aio_username'],
+        password=secrets['aio_key'],
         ssl=True)
 
 counter = 0
