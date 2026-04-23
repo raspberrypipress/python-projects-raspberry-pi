@@ -3,6 +3,7 @@ import socket
 import neopixel
 import machine
 import time
+import struct
 from secrets import secrets
 
 LED_PIN = 0          # Pin connected to the WS2812b
@@ -46,31 +47,54 @@ sock.bind(('0.0.0.0', ARTNET_PORT))
 
 print("Listening for Art-Net...")
 
-def parse_artnet_packet(packet):
-    # Art-Net DMX packets start with "Art-Net\0"
+def send_artpoll_reply(dest_ip):
+    print("got poll request")
+    my_ip = wlan.ifconfig()[0]
+    ip_parts = [int(x) for x in my_ip.split('.')]
+    short_name = "MicroPy Node"
+    long_name = "MicroPython ArtNet"
+    short_name_bytes = bytes(short_name, 'ascii') + \
+                           b'\x00' * (18 - len(short_name))
+    long_name_bytes = bytes(long_name, 'ascii') + \
+                          b'\x00' * (64 - len(long_name))
+    node_report = b"OK" + b'\x00' * (64 - 2)
+    subswitch = (UNIVERSE >> 8) & 0x0F
+    netswitch = (UNIVERSE >> 12) & 0x7F
+    # Build reply as fixed-length, pre-zeroed array
+    reply = bytearray(239)
+    reply[0:8] = b'Art-Net\x00'
+    reply[8:10] = struct.pack('<H', 0x2100)
+    reply[10:14] = bytes(ip_parts)
+    reply[14:16] = struct.pack('>H', ARTNET_PORT)
+    reply[18] = netswitch
+    reply[19] = subswitch
+    reply[23] = 0x80            
+    reply[26:44] = short_name_bytes
+    reply[44:108] = long_name_bytes
+    reply[108:172] = node_report
+    reply[172] = 0  
+    reply[173] = 1  
+    reply[174] = 0x80  # PortTypes[0] = 0x80 (DMX output)
+    reply[190] = UNIVERSE & 0xFF  # SwOut[0]: universe LSB
+    sock.sendto(reply, (dest_ip, ARTNET_PORT))
+
+@micropython.native
+def parse_artnet_packet(packet, addr):
+    # Art-Net header
     if packet[:8] != b'Art-Net\x00':
-        return None
-    # OpCode for ArtDMX: 0x5000 (little endian)
-    if packet[8] != 0x00 or packet[9] != 0x50:
-        return None
-    # Universe (little endian)
-    universe = packet[14] + (packet[15] << 8)
-    if universe != UNIVERSE:
-        return None
-    # Data l    g endian)
-    dlen = (packet[16] << 8) | packet[17]
-    data = packet[18:18+dlen]
-    return data
+        return
+    opcode = packet[8] | (packet[9] << 8)
+    if opcode == 0x5000:  # ArtDMX
+        data = packet[18:18+(NUM_LEDS*3)]
+        print("Received Art-Net DMX data:", list(data))
+        universe = packet[14] + (packet[15] << 8)
+        if universe == UNIVERSE:
+            np.buf[:NUM_LEDS*3] = data
+            np.write()
+    elif opcode == 0x2000:  # ArtPoll
+        send_artpoll_reply(addr[0])
 
 while True:
     pkt, addr = sock.recvfrom(1024)
-    data = parse_artnet_packet(pkt)
-    if data:
-        print("Received Art-Net DMX data:", list(data))
-        # Art-Net DMX data is just a stream of bytes
-        for i in range(NUM_LEDS):
-            offset = i*3
-            if offset + 3 <= len(data):
-                np[i] = (data[offset], data[offset+1], 
-                         data[offset+2])
-        np.write()
+    data = parse_artnet_packet(pkt, addr)
+    time.sleep(0.1)
