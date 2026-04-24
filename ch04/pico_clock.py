@@ -67,5 +67,4 @@ while True:
         int(math.cos(math.radians(180-now[5]*6))*100) + 120,
         st7789.color565(200,200,255)
         )
-    print(now[5], now[5]*6, 180-now[5]*6)
     time.sleep(0.1)
