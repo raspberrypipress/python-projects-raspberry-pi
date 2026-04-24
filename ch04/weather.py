@@ -14,14 +14,14 @@ url = "https://api.open-meteo.com/v1/forecast"
 params = {
     "latitude": 52.52,
     "longitude": 13.41,
-    "daily": ["temperature_2m_max", "precipitation_probability_max"],
+    "daily": ["temperature_2m_max", "precip_probability_max"],
     "forecast_days": 3
 }
 refresh_mins = 1
 
 days = ["today", "tomorrow", "the day after tomorrow"]
 daily_temperature_2m_max = []
-daily_precipitation_probability_max = []
+daily_precip_probability_max = []
 weather_index = 0
 have_weather_data = False
 
@@ -90,7 +90,7 @@ while is_running:
                     daily.Variables(0).Values(0), 
                     daily.Variables(0).Values(1),
                     daily.Variables(0).Values(2)]
-                daily_precipitation_probability_max = [
+                daily_precip_probability_max = [
                      daily.Variables(1).Values(0), 
                      daily.Variables(1).Values(1), 
                      daily.Variables(1).Values(2)]
@@ -105,7 +105,7 @@ while is_running:
     if changed:
         if have_weather_data:
             temp = daily_temperature_2m_max[weather_index]
-            prec = daily_precipitation_probability_max[weather_index]
+            prec = daily_precip_probability_max[weather_index]
             main_text.set_text( 
                 f"<b>The weather {days[weather_index]} is:</b><br>"
                 f"Max Temp: {temp:2.1f} "
