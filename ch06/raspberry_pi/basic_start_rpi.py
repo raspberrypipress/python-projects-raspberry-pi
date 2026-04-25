@@ -31,12 +31,15 @@ active_pattern = None
 def load_patterns() -> None:
     """Load pattern classes from pattern_*.py files."""
     for filename in os.listdir():
-        if filename.startswith("pattern_") and filename.endswith(".py"):
+        if (filename.startswith("pattern_") and
+               filename.endswith(".py")):
             module_name = filename[:-3]
             module = __import__(module_name)
-            if hasattr(module, "Pattern") and issubclass(module.Pattern, BasePattern):
+            if (hasattr(module, "Pattern") and
+                    issubclass(module.Pattern, BasePattern)):
                 obj = module.Pattern()
-                name = getattr(obj, "name", module_name.replace("pattern_", ""))
+                name = getattr(obj, "name",
+                       module_name.replace("pattern_", ""))
                 loaded_patterns[name] = obj
 
 def apply_brightness(r: int, g: int, b: int):
@@ -91,7 +94,8 @@ def start_pattern() -> None:
         obj = loaded_patterns[pattern]
         obj.stop = False
         active_pattern = obj
-        args = (strip, num_leds, apply_brightness, colours, speed, size)
+        args = (strip, num_leds, apply_brightness,
+                colours, speed, size)
         pattern_thread = threading.Thread(target=obj.run, args=args)
         pattern_thread.daemon = True
         pattern_thread.start()
